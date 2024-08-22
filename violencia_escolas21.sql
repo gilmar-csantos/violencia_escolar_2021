@@ -25,12 +25,59 @@ WHERE item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
 GROUP BY sigla_uf, tema
 ORDER BY sigla_uf, total_escolas DESC;
 
--- Top 5 Temas de Violência com Mais Incidências 
+-- Top 5 Temas de Violências com Mais Incidências 
 SELECT tema, SUM(quantidade_escola) AS total_escolas
 FROM testes.crime_escolas
 WHERE item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
 GROUP BY tema
 ORDER BY total_escolas DESC
+LIMIT 5;
+
+-- Maior Tema de Violências em Cada Estado
+WITH temas_por_estado AS (
+    SELECT
+        sigla_uf,
+        tema,
+        SUM(quantidade_escola) AS total_escolas
+    FROM
+        testes.crime_escolas
+    WHERE
+        item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
+    GROUP BY
+        sigla_uf, tema
+)
+
+SELECT
+    sigla_uf,
+    tema,
+    total_escolas
+FROM
+    temas_por_estado
+WHERE
+    (sigla_uf, total_escolas) IN (
+        SELECT
+            sigla_uf,
+            MAX(total_escolas)
+        FROM
+            temas_por_estado
+        GROUP BY
+            sigla_uf
+    )
+ORDER BY
+    sigla_uf;
+
+-- Os 5 Estados que Mais Lideraram o Número de Violências em 2021
+SELECT
+    sigla_uf,
+    SUM(quantidade_escola) AS total_violencias
+FROM
+    testes.crime_escolas
+WHERE
+    item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
+GROUP BY
+    sigla_uf
+ORDER BY
+    total_violencias DESC
 LIMIT 5;
 
 
