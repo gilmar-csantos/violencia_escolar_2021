@@ -17,7 +17,7 @@ Utilizando como banco de dados a Violência nas Escolas em 2021, gerado pelo Anu
 ## Exemplos de Consultas
 
 ```sql
--- Tipos de Violência Mais Comuns
+-- Tipos de Violências Mais Comuns
 SELECT tema, SUM(quantidade_escola) AS total_escolas
 FROM testes.crime_escolas
 WHERE item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
@@ -31,6 +31,7 @@ WHERE item NOT IN ('Nunca', 'Não', 'Sem resposta', 'Sem Resposta')
 GROUP BY tema
 ORDER BY total_escolas DESC
 LIMIT 5;
+```
 
 ## Análises e Resultados
 
